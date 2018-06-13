@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using YouTubeManager;
-using YouTubeManager.Models.MediaStreams;
 
 namespace Demo
 {
@@ -15,47 +13,95 @@ namespace Demo
 
         private static async Task VideoAsync()
         {
+            // YouTube Services
             var youtubeService = new YouTubeService();
-            Console.WriteLine("============== YouTube Manager ==============");
-            Console.WriteLine("Enter Video ID or URL:");
-            var videoId = Console.ReadLine();
-            videoId = NormalizeVideoId(videoId);
 
-            Console.WriteLine("============== Get Video Info ==============");
-            var video = await youtubeService.GetVideoAsync(videoId);
-            Console.WriteLine($"ID: {video.Id}\nTitle: {video.Title}\nAuthor: {video.Author}\nAuthorID: {video.AuthorId}\nUpload Date: {video.UploadDate}");
+            #region Get Video
+            //Console.WriteLine("============== YouTube Manager ==============");
+            //Console.WriteLine("Enter Video ID or URL:");
+            //var videoId = Console.ReadLine();
+            //videoId = NormalizeVideoId(videoId);
 
-            Console.WriteLine("============== Get Video Media Stream Info ==============");
-            var streamInfoSet = await youtubeService.GetVideoMediaStreamInfosAsync(videoId);
-            Console.WriteLine("> " +
-                              $"{streamInfoSet.Muxed.Count} muxed streams, " +
-                              $"{streamInfoSet.Video.Count} video-only streams, " +
-                              $"{streamInfoSet.Audio.Count} audio-only streams");
+            //Console.WriteLine("============== Get Video Info ==============");
+            //var video = await youtubeService.GetVideoAsync(videoId);
+            //Console.WriteLine($"ID: {video.Id}\nTitle: {video.Title}\nAuthor: {video.Author}\nAuthorID: {video.AuthorId}\nUpload Date: {video.UploadDate}");
 
-            Console.WriteLine("============== Get Highest Muxed Video Media Stream ==============");
-            var streamInfo = streamInfoSet.Muxed.WithHighestVideoQuality();
-            Console.WriteLine("Selected muxed stream with highest video quality:");
-            Console.WriteLine("> " +
-                              $"{streamInfo.VideoQualityLabel} video quality | " +
-                              $"{streamInfo.Container} format | " +
-                              $"{NormalizeFileSize(streamInfo.Size)}");
+            //Console.WriteLine("============== Get Video Media Stream Info ==============");
+            //var streamInfoSet = await youtubeService.GetVideoMediaStreamInfosAsync(videoId);
+            //Console.WriteLine("> " +
+            //                  $"{streamInfoSet.Muxed.Count} muxed streams, " +
+            //                  $"{streamInfoSet.Video.Count} video-only streams, " +
+            //                  $"{streamInfoSet.Audio.Count} audio-only streams");
 
-            // Compose file name, based on metadata
-            var fileExtension = streamInfo.Container.GetFileExtension();
-            var fileName = $"{video.Title}.{fileExtension}";
+            //Console.WriteLine("============== Get Highest Muxed Video Media Stream ==============");
+            //var streamInfo = streamInfoSet.Muxed.WithHighestVideoQuality();
+            //Console.WriteLine("Selected muxed stream with highest video quality:");
+            //Console.WriteLine("> " +
+            //                  $"{streamInfo.VideoQualityLabel} video quality | " +
+            //                  $"{streamInfo.Container} format | " +
+            //                  $"{NormalizeFileSize(streamInfo.Size)}");
 
-            // Replace illegal characters in file name
-            fileName = fileName.Replace(Path.GetInvalidFileNameChars(), '_');
+            //// Compose file name, based on metadata
+            //var fileExtension = streamInfo.Container.GetFileExtension();
+            //var fileName = $"{video.Title}.{fileExtension}";
 
-            // Download video
-            Console.Write("Downloading... ");
-            using (var progress = new ProgressBar())
-                await youtubeService.DownloadMediaStreamAsync(streamInfo, fileName, progress);
-            Console.WriteLine();
+            //// Replace illegal characters in file name
+            //fileName = fileName.Replace(Path.GetInvalidFileNameChars(), '_');
 
-            Console.WriteLine($"Video saved to '{fileName}'");
+            //// Download video
+            //Console.Write("Downloading... ");
+            //using (var progress = new ProgressBar())
+            //    await youtubeService.DownloadMediaStreamAsync(streamInfo, fileName, progress);
+            //Console.WriteLine();
+
+            //Console.WriteLine($"Video saved to '{fileName}'");
+
+            #endregion
+
+            #region Get Playlist
+
+            //Console.WriteLine("Enter playlist ID or URL: ");
+            //var playlistId = Console.ReadLine();
+            //playlistId = NormalizePlaylistId(playlistId);
+
+            //var playlist = await youtubeService.GetPlaylistAsync(playlistId);
+
+            //int i = 0;
+            //foreach (var video in playlist.Videos)
+            //{
+            //    i++;
+            //    Console.WriteLine($"STT: {i} Title: {video.Title}");
+            //}
+
+
+            #endregion
+
+            #region Search
+
+            Console.WriteLine("Enter keyword: ");
+            var keyword = Console.ReadLine();
+
+            var videos = await youtubeService.SearchVideosAsync(keyword, 1);
+
+            int i = 0;
+            foreach (var video in videos)
+            {
+                i++;
+                Console.WriteLine($"STT: {i} Title: {video.Title}");
+            }
+
+
+            #endregion
 
             Console.ReadKey();
+        }
+
+        private static string NormalizePlaylistId(string input)
+        {
+            if (!YouTubeService.TryParsePlaylistId(input, out var playlistId))
+                playlistId = input;
+
+            return playlistId;
         }
 
         /// <summary>
