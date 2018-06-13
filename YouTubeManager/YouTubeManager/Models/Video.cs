@@ -67,6 +67,7 @@ namespace YouTubeManager.Models
         [NotNull]
         public Statistics Statistics { get; }
 
+        /// <summary />
         public Video(string id, string title, string description,
             string author, string authorId, DateTimeOffset uploadDate,
             TimeSpan duration, IReadOnlyList<string> keywords,

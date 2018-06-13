@@ -22,6 +22,7 @@ namespace YouTubeManager
 {
     public partial class YouTubeService
     {
+        /// <inheritdoc />
         public async Task<Video> GetVideoAsync(string videoId)
         {
             videoId.EnsureNotNull(nameof(videoId));

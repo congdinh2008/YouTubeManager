@@ -20,7 +20,7 @@
         /// </summary>
         public long Dislikes { get; }
 
-
+        /// <summary />
         public Statistics(long views, long likes, long dislikes)
         {
             Views = views;

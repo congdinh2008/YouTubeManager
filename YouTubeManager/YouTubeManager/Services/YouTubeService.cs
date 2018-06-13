@@ -6,7 +6,7 @@ using YouTubeManager.Helpers;
 namespace YouTubeManager
 {
     /// <summary>
-    /// The entry point for <see cref="YouTubeService"/>.
+    /// The entry point for <see cref="YouTubeManager"/>.
     /// </summary>
     public partial class YouTubeService : IYouTubeService
     {
@@ -14,7 +14,7 @@ namespace YouTubeManager
         private readonly Dictionary<string, PlayerSource> _playerSourceCache;
 
         /// <summary>
-        /// Creates an instance of <see cref="YouTubeService">
+        /// Creates an instance of <see cref="YouTubeService"/>.
         /// </summary>
         public YouTubeService(HttpClient httpClient)
         {
@@ -23,7 +23,7 @@ namespace YouTubeManager
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="YouTubeService">
+        /// Creates an instance of <see cref="YouTubeService"/>.
         /// </summary>
         public YouTubeService() : this(HttpClientExtensions.GetSingleton())
         {
