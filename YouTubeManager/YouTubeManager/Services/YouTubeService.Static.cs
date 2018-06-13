@@ -19,7 +19,9 @@ namespace YouTubeManager
             if (input.IsBlank())
                 return false;
 
-            var match = Regex.Match(input, @"https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['""][^<>]*>|<\/a>))[?=&+%\w.-]*").Groups[1].Value;
+            string pattern = @"https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['""][^<>]*>|<\/a>))[?=&+%\w.-]*";
+
+            var match = Regex.Match(input, pattern, RegexOptions.IgnoreCase).Groups[1].Value;
 
             if (match.IsNotBlank() && ValidateVideoId(match))
             {

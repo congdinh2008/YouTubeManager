@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GalaSoft.MvvmLight.Threading;
 using System.Windows;
 
 namespace DemoWpf
@@ -13,5 +8,19 @@ namespace DemoWpf
     /// </summary>
     public partial class App : Application
     {
+        static App()
+        {
+            DispatcherHelper.Initialize();
+        }
+
+        private void App_OnStartup(object sender, StartupEventArgs e)
+        {
+            Locator.Init();
+        }
+
+        private void App_OnExit(object sender, ExitEventArgs e)
+        {
+            Locator.Cleanup();
+        }
     }
 }
