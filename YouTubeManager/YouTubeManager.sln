@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo", "Demo\Demo.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWpf", "DemoWpf\DemoWpf.csproj", "{21BF2495-56D7-414E-A57C-E5F6227C3FAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouTubeManagerWpf", "YouTubeManagerWpf\YouTubeManagerWpf.csproj", "{992E42B1-B585-4707-936F-F55616B3EECE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{21BF2495-56D7-414E-A57C-E5F6227C3FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21BF2495-56D7-414E-A57C-E5F6227C3FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21BF2495-56D7-414E-A57C-E5F6227C3FAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{992E42B1-B585-4707-936F-F55616B3EECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{992E42B1-B585-4707-936F-F55616B3EECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{992E42B1-B585-4707-936F-F55616B3EECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{992E42B1-B585-4707-936F-F55616B3EECE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
