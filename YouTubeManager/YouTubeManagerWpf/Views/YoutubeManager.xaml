@@ -1,0 +1,286 @@
+﻿<UserControl x:Class="YouTubeManagerWpf.Views.YouTubeManager"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:YouTubeManagerWpf.Views"
+        xmlns:converters="clr-namespace:YouTubeManagerWpf.Converters"
+        xmlns:vm="clr-namespace:YouTubeManagerWpf.ViewModels"
+        mc:Ignorable="d"
+        MinHeight="700" MinWidth="1000"
+        DataContext="{DynamicResource YouTubeManagerViewModel}">
+
+    <UserControl.Resources>
+        <vm:YouTubeManagerViewModel x:Key="YouTubeManagerViewModel"/>
+    </UserControl.Resources>
+    
+    <DockPanel>
+        <Border DockPanel.Dock="Top">
+            <Grid Margin="10">
+
+                <!--RowDefinitions of MainWindow-->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="7*"/>
+
+                </Grid.RowDefinitions>
+
+                <!--Settings vs Input-->
+                <Grid Grid.Row="0">
+                    <!--ColumnDefinitions of Row Input-->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Search Settings-->
+                    <Grid Grid.Column="0" Margin="0 0 10 0">
+
+                        <!--RowDefinitions Search Settings-->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!--Search On-->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <RadioButton Grid.Column="0" x:Name="rdoSearchOn" 
+                                         Content="Search On:" GroupName="Enabler" 
+                                         FontWeight="Bold" Margin="0 5 0 0"
+                                         IsChecked="{Binding BooleanProperty, 
+                                Converter={StaticResource RadioButtonCheckedConverter}, 
+                                ConverterParameter={x:Static vm:YouTubeManagerViewModel.BooleanFalse}}"/>
+
+                            <ComboBox Grid.Column="1" x:Name="cobSearchOn" 
+                                      ItemsSource="{Binding SearchOn}"
+                                      SelectedItem="{Binding SelectedSearchType}"
+                                      SelectedIndex="0"
+                                      IsEnabled="{Binding ElementName=rdoSearchOn, Path=IsChecked}">
+                            </ComboBox>
+                        </Grid>
+
+                        <!--Search Type-->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="Search Type:" Margin="0 15 0 0"
+                                       IsEnabled="{Binding ElementName=rdoSearchOn, Path=IsChecked}"/>
+                            <ComboBox Grid.Column="1" x:Name="cobSearchType" 
+                                      ItemsSource="{Binding SearchTypes}"
+                                      SelectedItem="{Binding SelectedSearchType}"
+                                      SelectedIndex="0"
+                                      IsEnabled="{Binding ElementName=rdoSearchOn, Path=IsChecked}">
+
+                            </ComboBox>
+                        </Grid>
+
+                        <!--Search Term-->
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" x:Name="txbSearchTerm" Margin="0 15 0 0"
+                                       Text="{Binding ElementName=cobSearchType, Path=Text, StringFormat=Input \{0\}:}"
+                                       IsEnabled="{Binding ElementName=rdoSearchOn,Path=IsChecked}"/>
+                            <TextBox Grid.Column="1" x:Name="txtSearchTerm"
+                                     Text="{Binding Query01, UpdateSourceTrigger=PropertyChanged}"
+                                     IsEnabled="{Binding ElementName=rdoSearchOn,Path=IsChecked}"/>
+                        </Grid>
+
+                        <!--No.of results and Current page-->
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="No. of results:"
+                                       Margin="0 15 0 0"
+                                       IsEnabled="{Binding ElementName=rdoSearchOn,Path=IsChecked}"/>
+                            <TextBox Grid.Column="1" x:Name="txtNoOfResults"
+                                     IsEnabled="{Binding ElementName=rdoSearchOn,Path=IsChecked}"/>
+                            <TextBlock Grid.Column="2" Text="Current Page:" Margin="10 15 0 0"
+                                       IsEnabled="{Binding ElementName=rdoSearchOn,Path=IsChecked}"/>
+                            <TextBox Grid.Column="3" x:Name="txtCurrentPage" 
+                                     Text="{Binding MaxPages, UpdateSourceTrigger=PropertyChanged}"
+                                     IsEnabled="{Binding ElementName=rdoSearchOn,Path=IsChecked}"/>
+                        </Grid>
+
+                        <!--Order By-->
+                        <Grid Grid.Row="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="Order By:" Margin="0 15 0 0"
+                                       IsEnabled="{Binding ElementName=rdoSearchOn,Path=IsChecked}"/>
+                            <ComboBox Grid.Column="1" x:Name="cobOrderBy"
+                                      IsEnabled="{Binding ElementName=rdoSearchOn,Path=IsChecked}">
+                                <ComboBoxItem>YouTube</ComboBoxItem>
+                                <ComboBoxItem>Vimeo</ComboBoxItem>
+                                <ComboBoxItem>Twitch</ComboBoxItem>
+                            </ComboBox>
+                        </Grid>
+                    </Grid>
+
+                    <!--Input list of Youtube videos-->
+                    <Grid Grid.Column="1">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="6*"/>
+                            <RowDefinition Height="0.5*"/>
+                        </Grid.RowDefinitions>
+
+                        <RadioButton Grid.Row="0" x:Name="rdoDownloadListVideos" 
+                                     Content="Input list of YouTube videos:" 
+                                     FontWeight="Bold" GroupName="Enabler"
+                                     Margin="0 5 0 0"
+                                     IsChecked="{Binding BooleanProperty, 
+                            Converter={StaticResource RadioButtonCheckedConverter}, 
+                            ConverterParameter={x:Static vm:YouTubeManagerViewModel.BooleanTrue}}"/>
+
+                        <TextBox Grid.Row="1" x:Name="txtListVideos" Margin="0 10 0 0"
+                                 TextWrapping="Wrap" AcceptsReturn="True"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 Text="{Binding Query02, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding ElementName=rdoDownloadListVideos,Path=IsChecked}"/>
+
+                        <ProgressBar Grid.Row="2" Background="Transparent"
+                                     IsIndeterminate="{Binding IsProgressIndeterminate}"
+                                     Value="{Binding Progress, Mode=OneWay}" />
+                    </Grid>
+                </Grid>
+
+                <!--Buttons-->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" x:Name="btnPopulateList"
+                            Command="{Binding GetDataCommand}" Margin="0 10 0 0"
+                            Style="{StaticResource MaterialDesignRaisedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Get Data"/>
+                            <materialDesign:PackIcon Margin="4 .5 0 0" Kind="Information" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Column="1" x:Name="btnDownloadVideos"
+                            Command="{Binding DownloadMediaStreamCommand}" Margin="10 10 0 0"
+                            Style="{StaticResource MaterialDesignRaisedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Download Videos"/>
+                            <materialDesign:PackIcon Margin="4 .5 0 0" Kind="Download" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Column="2" x:Name="btnSettings"
+                            Command="{Binding SettingsCommand}" Margin="10 10 0 0"
+                            Style="{StaticResource MaterialDesignRaisedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Settings"/>
+                            <materialDesign:PackIcon Margin="4 .5 0 0" Kind="Settings" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Column="3" x:Name="btnImportExcel"
+                            Command="{Binding ImportExcelCommand}" Margin="10 10 0 0"
+                            Style="{StaticResource MaterialDesignRaisedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Import Excel"/>
+                            <materialDesign:PackIcon Margin="4 .5 0 0" Kind="Import" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Column="4" x:Name="btnExportExcel"
+                            Command="{Binding ExportExcelCommand}" Margin="10 10 0 0"
+                            Style="{StaticResource MaterialDesignRaisedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Export Excel"/>
+                            <materialDesign:PackIcon Margin="4 .5 0 0" Kind="Export" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Column="5" x:Name="btnAddDetails"
+                            Command="{Binding AddDetailsCommand}" Margin="10 10 0 0"
+                            Style="{StaticResource MaterialDesignRaisedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Add Details"/>
+                            <materialDesign:PackIcon Margin="4 .5 0 0" Kind="TableSettings" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <!--Datagrid VideoInfo-->
+                <Border Grid.Row="2" Margin="0 10 0 0">
+                    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                        <Grid>
+                            <DataGrid Grid.Column="0" x:Name="dgDataChannel" 
+                                      ItemsSource="{Binding Videos}" AutoGenerateColumns="False"
+                                      materialDesign:DataGridAssist.CellPadding="13 8 8 8" 
+                                      materialDesign:DataGridAssist.ColumnHeaderPadding="8">
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="Author"
+                                                        Binding="{Binding Author}"/>
+                                    <DataGridTextColumn Header="Channel ID"
+                                                        Binding="{Binding ChannelId}"/>
+                                    <DataGridTextColumn Header="Video ID" 
+                                                        Binding="{Binding Id}"/>
+                                    <DataGridTextColumn Header="Title" MaxWidth="200"
+                                                        Binding="{Binding Title}"/>
+                                    <DataGridTextColumn Header="Description" MaxWidth="200"
+                                                        Binding="{Binding Description}"
+                                                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="MaxHeight" Value="20"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Header="Keywords" MaxWidth="200"
+                                                        Binding="{Binding Keywords, Converter={StaticResource ArrayToStringConverter}}"/>
+                                    <DataGridTextColumn Header="UploadDate"
+                                                        Binding="{Binding UploadDate}"/>
+                                    <DataGridTextColumn Header="ViewCount" 
+                                                        Binding="{Binding Statistics.ViewCount}"/>
+                                    <DataGridTextColumn Header="Duration" 
+                                                        Binding="{Binding Duration}"/>
+                                    <DataGridTextColumn Header="LikeCount"
+                                                        Binding="{Binding Statistics.LikeCount}"/>
+                                    <DataGridTextColumn Header="DislikeCount"
+                                                        Binding="{Binding Statistics.DislikeCount}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </materialDesign:Card>
+                </Border>
+            </Grid>
+        </Border>
+    </DockPanel>
+</UserControl>

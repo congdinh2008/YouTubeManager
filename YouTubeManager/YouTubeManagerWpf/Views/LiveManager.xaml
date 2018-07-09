@@ -1,0 +1,502 @@
+﻿<UserControl x:Class="YouTubeManagerWpf.Views.LiveManager"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:YouTubeManagerWpf.Views"
+        xmlns:converters="clr-namespace:YouTubeManagerWpf.Converters"
+        xmlns:vm="clr-namespace:YouTubeManagerWpf.ViewModels"
+        mc:Ignorable="d"
+        MinHeight="700" MinWidth="1000"
+        DataContext="{DynamicResource LiveManagerViewModel}">
+
+    <UserControl.Resources>
+        <vm:LiveManagerViewModel x:Key="LiveManagerViewModel"/>
+    </UserControl.Resources>
+    <Grid>
+        <!--RowDefinitions of MainWindow-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--Information and Settings-->
+        <Grid Grid.Row="0">
+
+            <!--Information and Settings ColumnDefinition-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--Information-->
+            <Grid Grid.Column="0">
+                <TabControl Margin="0 0 10 0">
+                    <TabItem Header="Infomation" FontWeight="Bold">
+                        <Grid Margin="10">
+
+                            <!--Information RowDefinition-->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!--Live type-->
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="Live Type:" 
+                                           Margin="0 15 0 0"/>
+
+                                <ComboBox Grid.Column="1" x:Name="cobLiveType"
+                                          ItemsSource="{Binding LiveTypes}"
+                                          SelectedItem="{Binding SelectedLiveType}"
+                                          SelectedIndex="0"/>
+                            </Grid>
+
+                            <!--Inputs-->
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Margin="0 15 0 0" x:Name="txbInput"
+                                           Text="{Binding ElementName=cobLiveType, Path=Text, StringFormat=Input \{0\}:}"/>
+
+                                <TextBox Grid.Column="1" x:Name="txtInput" Margin="15 0 0 0"
+                                         Text="{Binding InputQuery, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Grid.Column="2" x:Name="btnDownloadVideos"
+                                        Command="{Binding OpenInputCommand}" Margin="10 0 0 0"
+                                        Style="{StaticResource MaterialDesignRaisedButton}">
+                                    <materialDesign:PackIcon Kind="FolderOpen" Width="24" Height="24" />
+                                </Button>
+                            </Grid>
+
+                            <!--Outputs-->
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Margin="0 15 0 0" 
+                                           x:Name="txbOutput" Text="Output:"/>
+
+                                <ComboBox Grid.Column="1" x:Name="cobOutputItem"
+                                          IsEditable="True"
+                                          ItemsSource="{Binding OutputItems}"
+                                          SelectedItem="{Binding SelectedOutputItem}"
+                                          Text="{Binding NewItem, UpdateSourceTrigger=LostFocus}"/>
+
+                            </Grid>
+
+                            <!--Name-->
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Margin="0 15 0 0" x:Name="txbNameStream"
+                                           Text="Name"/>
+
+                                <TextBox Grid.Column="1" x:Name="txtNameStream" Margin="15 0 0 0"
+                                         Text="{Binding NameStream, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+
+            <!--Settings-->
+            <Grid Grid.Column="1">
+                <TabControl>
+                    <TabItem Header="Settings">
+                        <Grid>
+                            <!--Settings ColumnDefinitions-->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!--Settings 1-->
+                            <Grid Grid.Column="0" Margin="0 0 10 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <!--Non Filter and Loop-->
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <CheckBox Grid.Column="0" Content="Filter"
+                                              x:Name="chkFilter"
+                                              IsChecked="{Binding BooleanFilterProperty,
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={x:Static vm:LiveManagerViewModel.BooleanTrue}}"/>
+                                    <CheckBox Grid.Column="1" Content="Loop"
+                                              x:Name="chkLoop" 
+                                              IsChecked="{Binding BooleanLoopProperty,
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={x:Static vm:LiveManagerViewModel.BooleanFalse}}"/>
+                                </Grid>
+
+                                <!--Crop-->
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <CheckBox Grid.Column="0" Content="Crop"
+                                              x:Name="chkCrop"
+                                              IsChecked="{Binding BooleanCropProperty, 
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={x:Static vm:LiveManagerViewModel.BooleanTrue}}"/>
+                                    <TextBox Grid.Column="1"
+                                             Text="{Binding CropText}"
+                                             IsEnabled="{Binding ElementName=chkCrop, Path=IsChecked}"/>
+                                </Grid>
+
+                                <!--Add Images-->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <CheckBox Grid.Column="0" Content="Add Images"
+                                              x:Name="chkAddImages"
+                                              IsChecked="{Binding BooleanAddImagesProperty, 
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={x:Static vm:LiveManagerViewModel.BooleanTrue}}"/>
+
+                                    <Button Grid.Column="1" x:Name="btnOpenImages"
+                                            Command="{Binding OpenImagesCommand}" Margin="10 0"
+                                            Style="{StaticResource MaterialDesignRaisedButton}"
+                                            IsEnabled="{Binding ElementName=chkAddImages, Path=IsChecked}">
+                                        <materialDesign:PackIcon Kind="FileImage" Width="24" Height="24" />
+                                    </Button>
+                                </Grid>
+
+                                <!--Path Images-->
+                                <TextBox Grid.Row="3"
+                                         Text="{Binding AddImages}"
+                                         IsEnabled="{Binding ElementName=chkAddImages, Path=IsChecked}"/>
+
+                                <!--Reset Settings-->
+                                <Button Grid.Row="4" x:Name="btnResetSettings"
+                                        Command="{Binding ResetSettingsCommand}" Margin="10 0"
+                                        Style="{StaticResource MaterialDesignRaisedButton}">
+                                    <materialDesign:PackIcon Kind="BackupRestore" Width="24" Height="24" />
+                                </Button>
+                            </Grid>
+
+                            <!--Settings 2-->
+                            <Grid Grid.Column="1" Margin="0 0 10 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <!--Preset-->
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Preset:" Margin="0 10 0 0"/>
+                                    <ComboBox Grid.Column="1" x:Name="cobPreset"
+                                              ItemsSource="{Binding Presets}"
+                                              SelectedItem="{Binding SelectedPresets}"
+                                              SelectedIndex="0"
+                                              IsEnabled="{Binding ElementName=chkFilter, Path=IsChecked}"/>
+                                </Grid>
+
+                                <!--Size-->
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="Size:" Margin="0 10 0 0"/>
+
+                                    <ComboBox Grid.Column="1" x:Name="cobSize" 
+                                              ItemsSource="{Binding Sizes}"
+                                              SelectedItem="{Binding SelectedSizes}"
+                                              SelectedIndex="0"
+                                              IsEnabled="{Binding ElementName=chkFilter, Path=IsChecked}"/>
+                                </Grid>
+
+                                <!--Bitrate-->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Bitrate:" Margin="0 10 0 0"/>
+                                    <ComboBox Grid.Column="1" x:Name="cobBitrate" 
+                                              ItemsSource="{Binding Bitrates}"
+                                              SelectedItem="{Binding SelectedBitrates}"
+                                              SelectedIndex="0"
+                                              IsEnabled="{Binding ElementName=chkFilter, Path=IsChecked}"/>
+                                </Grid>
+
+                                <!--Framerate-->
+                                <Grid Grid.Row="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Framerate:" Margin="0 10 0 0"/>
+                                    <ComboBox Grid.Column="1" x:Name="cobFramerate" 
+                                              ItemsSource="{Binding Framerates}"
+                                              SelectedItem="{Binding SelectedFramerates}"
+                                              SelectedIndex="0"
+                                              IsEnabled="{Binding ElementName=chkFilter, Path=IsChecked}"/>
+                                </Grid>
+
+                                <!--Upload Speed-->
+                                <Grid Grid.Row="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="USpeed:" Margin="0 10 0 0"/>
+                                    <ComboBox Grid.Column="1" x:Name="cobUSpeed" 
+                                              ItemsSource="{Binding USpeeds}"
+                                              SelectedItem="{Binding SelectedUSpeeds}"
+                                              SelectedIndex="0"
+                                              IsEnabled="{Binding ElementName=chkFilter, Path=IsChecked}"/>
+                                </Grid>
+                            </Grid>
+
+                            <!--Settings 3-->
+                            <Grid Grid.Column="2" Margin="0 0 10 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <!--Threads-->
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Threads:" Margin="0 10 0 0"/>
+                                    <ComboBox Grid.Column="1" x:Name="cobThreads" 
+                                              ItemsSource="{Binding Threads}"
+                                              SelectedItem="{Binding SelectedThreads}"
+                                              SelectedIndex="0"
+                                              IsEnabled="{Binding ElementName=chkFilter, Path=IsChecked}"/>
+                                </Grid>
+
+                                <!--CPUs-->
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="CPUs:" 
+                                               Margin="0 10 0 0"/>
+
+                                    <ComboBox Grid.Column="1"
+                                              IsEnabled="{Binding ElementName=chkFilter, Path=IsChecked}"/>
+                                </Grid>
+
+                                <!--Blur-->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Blur:"
+                                               Margin="0 10 0 0"/>
+                                    <ComboBox Grid.Column="1" x:Name="cobBlurs" 
+                                              ItemsSource="{Binding Blurs}"
+                                              SelectedItem="{Binding SelectedBlurs}"
+                                              SelectedIndex="0"
+                                              IsEnabled="{Binding ElementName=chkFilter, Path=IsChecked}"/>
+                                </Grid>
+
+                                <!--Speed-->
+                                <Grid Grid.Row="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="Speed:" 
+                                               Margin="0 10 0 0"/>
+
+                                    <ComboBox Grid.Column="1" x:Name="cobSpeeds" 
+                                              ItemsSource="{Binding Speeds}"
+                                              SelectedItem="{Binding SelectedSpeeds}"
+                                              SelectedIndex="99"
+                                              IsEnabled="{Binding ElementName=chkFilter, Path=IsChecked}"/>
+                                </Grid>
+
+                                <!--Volume-->
+                                <Grid Grid.Row="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="Volume:" 
+                                               Margin="0 10 0 0"/>
+
+                                    <ComboBox Grid.Column="1" x:Name="cobVolumes" 
+                                              ItemsSource="{Binding Volumes}"
+                                              SelectedItem="{Binding SelectedVolumes}"
+                                              SelectedIndex="99"
+                                              IsEnabled="{Binding ElementName=chkFilter, Path=IsChecked}"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
+
+        <!--Buttons-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--Add Stream-->
+            <Button Grid.Column="0" x:Name="btnAddStream"
+                    Command="{Binding AddStreamCommand}" Margin="0 10 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}">
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Add Stream"/>
+                    <materialDesign:PackIcon Margin="4 .5 0 0" Kind="LibraryPlus" />
+                </StackPanel>
+                
+            </Button>
+
+            <!--Edit Stream-->
+            <Button Grid.Column="1" x:Name="btnEditStream"
+                    Command="{Binding EditStreamCommand}" Margin="10 10 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Edit Stream"/>
+                    <materialDesign:PackIcon Margin="4 .5 0 0" Kind="LeadPencil" />
+                </StackPanel>
+            </Button>
+
+            <!--Delete Stream-->
+            <Button Grid.Column="2" x:Name="btnDeleteStream"
+                    Command="{Binding DeleteStreamCommand}" Margin="10 10 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Delete Stream"/>
+                    <materialDesign:PackIcon Margin="4 .5 0 0" Kind="Delete" />
+                </StackPanel>
+            </Button>
+
+            <!--Run Stream-->
+            <Button Grid.Column="3" x:Name="btnRunStream"
+                    Command="{Binding RunStreamCommand}" Margin="10 10 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Run Stream"/>
+                    <materialDesign:PackIcon Margin="4 .5 0 0" Kind="Run" />
+                </StackPanel>
+            </Button>
+
+            <!--Run All-->
+            <Button Grid.Column="4" x:Name="btnRunAll"
+                    Command="{Binding RunAllCommand}" Margin="10 10 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Run All"/>
+                    <materialDesign:PackIcon Margin="4 .5 0 0" Kind="RunFast" />
+                </StackPanel>
+            </Button>
+
+            <!--Add Details-->
+            <Button Grid.Column="5" x:Name="btnAddDetails"
+                    Command="{Binding AddDetailsCommand}" Margin="10 10 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Add Details"/>
+                    <materialDesign:PackIcon Margin="4 .5 0 0" Kind="TableSettings" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!--Datagrid Strems Info-->
+        <Border Grid.Row="2" Margin="0 10 0 0">
+            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                <Grid>
+                    <DataGrid Grid.Column="0" x:Name="dgDataChannel"
+                              ItemsSource="{Binding StreamInfos}" AutoGenerateColumns="False"
+                              materialDesign:DataGridAssist.CellPadding="13 8 8 8"
+                              materialDesign:DataGridAssist.ColumnHeaderPadding="8">
+                        
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Action"
+                                                Binding="{Binding Action}"/>
+                            <DataGridTextColumn Header="Name"
+                                                Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Live Type"
+                                                Binding="{Binding LiveType}"/>
+                            <DataGridTextColumn Header="InputLive" 
+                                                Binding="{Binding Input}"/>
+                            <DataGridTextColumn Header="OutputLive"
+                                                Binding="{Binding Output}"/>
+                            <DataGridTextColumn Header="Time" 
+                                                Binding="{Binding Time}"/>
+                            <DataGridTextColumn Header="FPS"
+                                                Binding="{Binding FPS}"/>
+                            <DataGridTextColumn Header="Bitrate"
+                                                Binding="{Binding Bitrate}"/>
+                            <DataGridTextColumn Header="USpeed"
+                                                Binding="{Binding USpeed}"/>
+                            <DataGridTextColumn Header="Status"
+                                                Binding="{Binding Status}"/>
+                            <DataGridTextColumn Header="CreatedDate"
+                                                Binding="{Binding CreatedDate}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </materialDesign:Card>
+        </Border>
+    </Grid>
+</UserControl>

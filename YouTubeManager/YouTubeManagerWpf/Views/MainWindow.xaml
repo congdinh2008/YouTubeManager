@@ -3,23 +3,59 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:YouTubeManagerWpf"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:YouTubeManagerWpf.Views"
+        xmlns:converters="clr-namespace:YouTubeManagerWpf.Converters"
+        xmlns:vm="clr-namespace:YouTubeManagerWpf.ViewModels"
+        xmlns:controls="clr-namespace:YouTubeManagerWpf.Controls"
         mc:Ignorable="d"
-        Title="YouTube Manager" Width="700" Height="610"
-        Icon="/YouTubeManagerWpf;component/favicon.ico"
         Background="{DynamicResource MaterialDesignPaper}"
-        DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
         FocusManager.FocusedElement="{Binding ElementName=QueryTextBox}"
-        FontFamily="{DynamicResource MaterialDesignFont}"
+        Icon="/YouTubeManagerWpf;component/favicon.ico"
         SnapsToDevicePixels="True"
         TextElement.FontSize="13"
         TextElement.FontWeight="Regular"
-        TextElement.Foreground="{DynamicResource SecondaryTextBrush}"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         UseLayoutRounding="True"
-        WindowStartupLocation="CenterScreen">
-    <Grid>
-        
-    </Grid>
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="YouTube Manager" Height="720" Width="1280"
+        MinHeight="600" MinWidth="800"
+        WindowStartupLocation="CenterScreen"
+        DataContext="{DynamicResource MainViewModel}">
+    
+    <Window.Resources>
+        <vm:MainViewModel x:Key="MainViewModel"/>
+    </Window.Resources>
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top">
+            <Grid Margin="5">
+                <controls:TabControlEx ItemsSource="{Binding TabViewModels}"
+                                       SelectedItem="{Binding SelectedTabViewModel}">
+
+                    <TabControl.ItemContainerStyle>
+                        <Style TargetType="TabItem">
+                            <Setter Property="Header" Value="{Binding Header}" />
+                        </Style>
+                    </TabControl.ItemContainerStyle>
+
+                    <TabControl.Resources>
+
+                        <!--This is the body of the TabItem template-->
+                        <DataTemplate DataType="{x:Type vm:YouTubeManagerViewModel}">
+                            <local:YouTubeManager/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:LiveManagerViewModel}">
+                            <local:LiveManager/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:ReupManagerViewModel}">
+                            <local:ReupManager/>
+                        </DataTemplate>
+                    </TabControl.Resources>
+
+                </controls:TabControlEx>
+            </Grid>
+        </Border>
+    </DockPanel>
 </Window>

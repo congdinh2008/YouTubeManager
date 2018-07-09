@@ -8,19 +8,19 @@ namespace YouTubeManagerWpf
     /// </summary>
     public partial class App : Application
     {
-        static App()
-        {
-            DispatcherHelper.Initialize();
-        }
+        //static App()
+        //{
+        //    DispatcherHelper.Initialize();
+        //}
 
-        private void App_OnStartup(object sender, StartupEventArgs e)
-        {
-            Locator.Init();
-        }
+        //private void App_OnStartup(object sender, StartupEventArgs e)
+        //{
+        //    Locator.Init();
+        //}
 
-        private void App_OnExit(object sender, ExitEventArgs e)
-        {
-            Locator.Cleanup();
-        }
+        //private void App_OnExit(object sender, ExitEventArgs e)
+        //{
+        //    Locator.Cleanup();
+        //}
     }
 }
